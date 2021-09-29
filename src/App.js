@@ -1,4 +1,4 @@
-import { Home } from './pages';
+import { Home, Detail } from './pages';
 
 import {
   BrowserRouter as Router,
@@ -10,8 +10,11 @@ function App() {
   return (
     <Router className="App">
       <Switch>
-        <Route path="/">
-          <Home title="hai"/>
+        <Route exact path="/">
+          <Home />
+        </Route>
+        <Route path="/:id">
+          <Detail />
         </Route>
       </Switch>
     </Router>

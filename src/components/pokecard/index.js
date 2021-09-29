@@ -3,6 +3,7 @@ import { css } from '@emotion/react'
 import { Heading, Badge } from '../'
 import PokeBallBG from '../../assets/pokeballCircle.svg'
 import PokeBall from '../../assets/pokeball2.svg'
+import { useHistory } from 'react-router-dom';
 
 
 const pokeImg = css`
@@ -54,7 +55,14 @@ const PokeCard = (props) => {
         width: 300px;
         position: relative;
         overflow: hidden;
+        cursor: pointer;
     `
+
+    const history = useHistory();
+    function handleClick() {
+        history.push(`/${props.id}`);
+    }
+
     return (
       <div css={{ "position":"relative" }}>
       {
@@ -67,7 +75,7 @@ const PokeCard = (props) => {
             </div>
           ) 
       }
-        <div className="pokecard" css={cardStyle}>
+        <div onClick={handleClick} className="pokecard" css={cardStyle}>
             <div css={{ "display": "flex", "justifyContent": "center", "flexDirection": "column", "marginLeft": "20px" }}>
                 <Heading size="1.5em" color="white">Pikachu</Heading>
                 <div>

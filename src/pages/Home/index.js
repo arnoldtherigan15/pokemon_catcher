@@ -32,6 +32,8 @@ const Home = (props) => {
             window.removeEventListener('scroll', handleScroll);
         };
     }, [scrollPosition]);
+
+    
     return (
         <>
             <Navbar/>
@@ -48,7 +50,11 @@ const Home = (props) => {
                     justify-content: center;
                     flex-wrap: wrap;
                 `}>
-                    <PokeCard owned="1" color="#5cd0b1" img="http://assets.stickpng.com/images/580b57fcd9996e24bc43c325.png" />
+                    <PokeCard 
+                        id="1"
+                        owned="1" 
+                        color="#5cd0b1" 
+                        img="http://assets.stickpng.com/images/580b57fcd9996e24bc43c325.png"/>
                     <PokeCard color="#ef6a6a" img="http://assets.stickpng.com/images/580b57fcd9996e24bc43c325.png" />
                     <PokeCard color="#76bcf7" img="http://assets.stickpng.com/images/580b57fcd9996e24bc43c325.png" />
                     <PokeCard owned="2" color="#ef6a6a" img="http://assets.stickpng.com/images/580b57fcd9996e24bc43c325.png" />
