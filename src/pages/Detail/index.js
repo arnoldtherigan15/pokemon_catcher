@@ -1,8 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import { useState } from 'react'
 import { useParams, Link } from "react-router-dom";
-import { Button } from '../../components'
+import { Button, Modal, generateTab, FailedNotification, SuccessNotification } from '../../components'
 import LeftArrow from '../../assets/left-arrow.svg'
+import { useQuery, gql } from '@apollo/client'
+import { myPokemonsVar } from '../../config'
 
 const detailPageStyle = css`
     background-color: #fbdb5d;
@@ -28,7 +31,7 @@ const floatingContainerStyle = css`
 
 const pokemonImageStyle = css`
     position: absolute;
-    top : 110px;
+    top : 140px;
     left: 50%;
     transform: translate(-50%, 0);
     z-index:2;
@@ -36,10 +39,10 @@ const pokemonImageStyle = css`
 
 const circleStyle = css`
     position: absolute;
-    top : 110px;
+    top : 160px;
     left: 50%;
     transform: translate(-50%, 0);
-    z-index:1;
+    z-index:0;
     width: 200px;
     height: 200px;
     background-color: rgba(255, 255, 255,.4);
@@ -53,8 +56,108 @@ const backArrowStyle = css`
     z-index: 2;
     cursor: pointer;
 `
+
+const tabContainerStyle = css`
+    display: flex;
+`
+const tabStyle = css`
+    border: none;
+    border-right: 2px solid gray;
+    padding: 10px;
+    border-top-right-radius:10px;
+    border-top-left-radius:10px;
+    margin: 0 10px;
+`
+const activeStyle = css`
+    border: none;
+    border-right: 2px solid gray;
+    padding: 10px;
+    border-top-right-radius:10px;
+    border-top-left-radius:10px;
+    margin: 0 10px;
+    border-bottom: 1px solid #fbdb5d;
+`
+
+const GET_POKEMON_DETAIL = gql`
+    query pokemon($name: String!) {
+        pokemon(name: $name) {
+            id
+            name
+            sprites {
+                front_default
+            }
+            moves {
+                move {
+                    name
+                }
+            }
+            types {
+                type {
+                    name
+                    url
+                }
+            }
+        }
+    }
+`
+
 const Detail = () => {
-    let { id } = useParams();
+    let { name } = useParams();
+    const [isShowForm,setIsShowForm] = useState(false)
+    const [isShowSuccess,setIsShowSuccess] = useState(false)
+    const [isShowFailed,setIsShowFailed] = useState(false)
+
+    const clickModal = () =>  {
+        if(Math.random() < 0.5) { //50% probability of getting true
+            setIsShowSuccess(true)
+            setTimeout(() => {
+                setIsShowSuccess(false)
+                setIsShowForm(true)
+            }, 2000);
+        } else {
+            setIsShowFailed(true)
+            setTimeout(() => {
+                setIsShowFailed(false)
+            }, 2000);
+        }
+    }
+
+    const [currentTab, setCurrentTab] = useState('tab1');
+    // const tabList = TabList
+
+    const { loading, error, data } = useQuery(GET_POKEMON_DETAIL, {
+        variables: {
+            name
+        }
+    })
+
+    
+    
+    if (loading) return <p>Loading Detail...</p>;
+    if (error) {
+        console.log(error,">>>> eroror detail");
+        return <p>Error :(</p>;
+    }
+    
+    let { sprites, name: pokeName, moves, types  } = data.pokemon
+    const submitName = (e, nickName) => {
+        e.preventDefault()
+        setIsShowForm(false)
+        const previousData = JSON.parse(localStorage.getItem("myPokemons")) || [];
+        let isExists = previousData.filter((poke) => poke.name === name && poke.nickName === nickName).length > 0
+        if(isExists) {// pokemon is Exists
+            alert("pokemon sudah ada")
+        } else {
+            const newData = {
+                name,
+                nickName,
+                image: sprites.front_default
+            }
+            localStorage.setItem("myPokemons", JSON.stringify([...previousData, newData]));
+            myPokemonsVar([...previousData, newData])
+        }
+    }
+
     return (
         <>
             <Link to="/" css={backArrowStyle}>
@@ -63,17 +166,37 @@ const Detail = () => {
             <div css={detailPageStyle}>
                 <div css={circleStyle}></div>
                 <div css={pokemonImageStyle}>
-                    <img height="200" src="http://assets.stickpng.com/images/580b57fcd9996e24bc43c325.png" alt="pokemon" />
+                    <img height="200" width="200" src={sprites.front_default} alt="pokemon" />
                 </div>
                 <div css={floatingContainerStyle}>
-                    <h1 css={{ "textAlign": "center", "margin": "10px 0;" }}>Pikachu</h1>
-                    <p>Lorem lorem lorem lorem lorem lrem lorem lorem lorem lorem lrem lorem lorem lorem lorem lrem lorem lorem lorem lorem lrem lorem lorem lorem lorem lorem</p>
-                    
+                    <h1 css={{ "textAlign": "center", "margin": "10px 0;" }}>{pokeName}</h1>
+                    <div css={tabContainerStyle}>
+                        {
+                            generateTab(moves, types).map((tab, i) => (
+                                <button 
+                                    key={i}
+                                    onClick={() => setCurrentTab(tab.name)} 
+                                    css={(tab.name === currentTab) ? activeStyle : tabStyle}>
+                                    {tab.label}
+                                </button>
+                            ))
+                        }
+                    </div>
+                    {
+                        generateTab(moves, types).map((tab, i) => {
+                        if(tab.name === currentTab) {
+                            return <div key={i}>{tab.content}</div>;
+                        } else {
+                            return null;
+                        }
+                        })
+                    }
                 </div>
             </div>
-            {/* <div css={{ "position":"absolute", "bottom":0, "left":0 }}> */}
-                <Button /> 
-            {/* </div> */}
+            <Button onClick={clickModal} /> 
+            <Modal show={isShowForm} onSubmit={submitName}/>
+            <FailedNotification show={isShowFailed}/>
+            <SuccessNotification show={isShowSuccess}/>
         </>
     )
 }

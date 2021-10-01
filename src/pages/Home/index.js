@@ -3,6 +3,8 @@ import { css,keyframes } from '@emotion/react'
 import React, {useState, useEffect} from 'react';
 import { Heading, Navbar, PokeCard } from '../../components'
 import pokeAppIcon from '../../assets/pokemonCatch.svg'
+import { useQuery, gql } from '@apollo/client'
+
 const mainContainer = css`
     min-height:100vh;
     padding: 0 20px;
@@ -13,9 +15,32 @@ const fade = keyframes`
     to   { opacity: 1; }
 `
 
+const GET_POKEMONS = gql`
+    query Pokemons($limit: Int, $offset: Int) {
+        pokemons(limit: $limit, offset: $offset) {
+            results {
+                id
+                name
+                image
+                ownedCounter @client
+            }
+        }
+    }  
+`
+
+// const GET_POKEMONS = gql`
+//     query {
+//         pokemons @client {
+//             isOwned @client
+//         }
+//     }
+// `
+
 const Home = (props) => {
     const [scrollPosition, setScrollPosition] = useState(0);
     const [isShowBottom, setShowBottom] = useState(false);
+    // const [pokemons, setPokemons] = useState([])
+
     const handleScroll = () => {
         const position = window.pageYOffset;
         setScrollPosition(position);
@@ -33,7 +58,43 @@ const Home = (props) => {
         };
     }, [scrollPosition]);
 
+    // const { loading, error, data } = useQuery(GET_POKEMONS, {
+    //     variables: {
+    //         limit: 20,
+    //         offset: 0
+    //     }
+    // });
+    const { loading, error, data } = useQuery(GET_POKEMONS);
+
+    // const cache = new InMemoryCache({
+    //     typePolicies: { // Type policy map
+    //       Product: {
+    //         fields: { // Field policy map for the Product type
+    //           isOwned: { // Field policy for the isInCart field
+    //             read(_, { variables }) { // The read function for the isInCart field
+    //               return localStorage.getItem('CART').includes(
+    //                 variables.productId
+    //               );
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //   });
+      
+
+    if (loading) return <p>Loading...</p>;
+    if (error) {
+        console.log(error,">>>>");
+        return <p>Error :</p>;
+    }
+    // if(data) {
+    //     setPokemons(data.pokemons.results)
+    // }
     
+    // console.log(data,">>>>dataa");
+    // const myPokemons = JSON.parse(localStorage.getItem("myPokemons"));
+
     return (
         <>
             <Navbar/>
@@ -45,24 +106,25 @@ const Home = (props) => {
                     <img width={50} src={pokeAppIcon} alt="poke app icon" />
                     <Heading color="black" size="2em">Pokedex</Heading>
                 </div>
+
                 <div css={css`
                     display: flex;
                     justify-content: center;
                     flex-wrap: wrap;
                 `}>
-                    <PokeCard 
-                        id="1"
-                        owned="1" 
-                        color="#5cd0b1" 
-                        img="http://assets.stickpng.com/images/580b57fcd9996e24bc43c325.png"/>
-                    <PokeCard color="#ef6a6a" img="http://assets.stickpng.com/images/580b57fcd9996e24bc43c325.png" />
-                    <PokeCard color="#76bcf7" img="http://assets.stickpng.com/images/580b57fcd9996e24bc43c325.png" />
-                    <PokeCard owned="2" color="#ef6a6a" img="http://assets.stickpng.com/images/580b57fcd9996e24bc43c325.png" />
-                    <PokeCard color="#fbd76e" img="http://assets.stickpng.com/images/580b57fcd9996e24bc43c325.png" />
-                    <PokeCard color="#ef6a6a" img="http://assets.stickpng.com/images/580b57fcd9996e24bc43c325.png" />
-                    <PokeCard color="#76bcf7" img="http://assets.stickpng.com/images/580b57fcd9996e24bc43c325.png" />
-                    <PokeCard color="#fbd76e" img="http://assets.stickpng.com/images/580b57fcd9996e24bc43c325.png" />
-                    <PokeCard color="#ef6a6a" img="http://assets.stickpng.com/images/580b57fcd9996e24bc43c325.png" />
+                    {data.pokemons.results.map((pokemon,i) => {
+                        return (
+                            <PokeCard 
+                                key={pokemon.id}
+                                owned={pokemon.ownedCounter} 
+                                color="#5cd0b1" 
+                                {...pokemon}
+                        />
+                        )
+                    })}
+                {/* {
+                    JSON.stringify(data)
+                } */}
                 </div>
                 {
                     isShowBottom && (
