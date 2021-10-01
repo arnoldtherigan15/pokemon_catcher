@@ -6,8 +6,10 @@ import PokeBall from '../../assets/pokeball2.svg'
 import { useHistory } from 'react-router-dom';
 
 
+
 const pokeImg = css`
-    height: 60%;
+    height: 100px;
+    width: 100px;
     position: absolute;
     right: 10px;
     bottom: 15px;
@@ -43,6 +45,7 @@ const pokeBallStyle = css`
     margin-right: 5px;
 `
 
+
 const PokeCard = (props) => {
     const cardStyle = css`
         background-color: ${props.color || "#fbd76e"};
@@ -60,7 +63,7 @@ const PokeCard = (props) => {
 
     const history = useHistory();
     function handleClick() {
-        history.push(`/${props.id}`);
+        history.push(`/${props.name}`);
     }
 
     return (
@@ -70,20 +73,20 @@ const PokeCard = (props) => {
             <div css={ownedIndicator}>
                 <div css={{ "display": "flex", "alignItems": "center" }}>
                     <img css={pokeBallStyle} src={PokeBall} alt="poke ball" />
-                    <p>{props.owned}</p>
+                    <p css={{ "color": "black" }}>Owned | {props.owned}</p>
                 </div>
             </div>
           ) 
       }
         <div onClick={handleClick} className="pokecard" css={cardStyle}>
             <div css={{ "display": "flex", "justifyContent": "center", "flexDirection": "column", "marginLeft": "20px" }}>
-                <Heading size="1.5em" color="white">Pikachu</Heading>
+                <Heading size="1.5em" color="white">{props.name}</Heading>
                 <div>
                     <Badge text="Grass" textColor="white" />
                 </div>
             </div>
             <div>
-                <img css={pokeImg} src={props.img} alt="pokemon" />
+                <img css={pokeImg} src={props.image} alt="pokemon" />
                 <img css={PokeBallBGStyle} src={PokeBallBG} alt="pokeball background" />
                 {/* <img css={PokeBall2BGStyle} src={PokeBallBG} alt="pokeball background" /> */}
             </div>

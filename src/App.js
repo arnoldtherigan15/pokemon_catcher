@@ -1,4 +1,6 @@
-import { Home, Detail } from './pages';
+import { Home, Detail, MyPokemon } from './pages';
+import { ApolloProvider } from "@apollo/client";
+import client from "./config"
 
 import {
   BrowserRouter as Router,
@@ -8,16 +10,21 @@ import {
 
 function App() {
   return (
-    <Router className="App">
-      <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route path="/:id">
-          <Detail />
-        </Route>
-      </Switch>
-    </Router>
+    <ApolloProvider client={client}>
+      <Router className="App">
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route path="/myPokemon">
+            <MyPokemon />
+          </Route>
+          <Route path="/:name">
+            <Detail />
+          </Route>
+        </Switch>
+      </Router>
+    </ApolloProvider>
   );
 }
 

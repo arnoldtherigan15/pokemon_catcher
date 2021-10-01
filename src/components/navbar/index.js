@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import pokeball from '../../assets/pokeball5.svg'
+import { useHistory } from 'react-router-dom';
 
 const navStyle = css`
   background-color: #f9ce48;
@@ -15,6 +16,7 @@ const navStyle = css`
 
 const pokeballStyle = css`
   width: 50px;
+  cursor: pointer;
 `
 
 const navBrandStyle = css`
@@ -24,12 +26,16 @@ const navBrandStyle = css`
 `
 
 const Navbar = () => {
+  const history = useHistory();
+    function handleClick() {
+        history.push("/myPokemon");
+    }
     return (
       <nav
         css={navStyle}
       >
         <div css={navBrandStyle}>
-          <img src={pokeball} alt="pokeball" css={pokeballStyle} />
+          <img onClick={handleClick} src={pokeball} alt="pokeball" css={pokeballStyle} />
         </div>
       </nav>
     )

@@ -36,10 +36,10 @@ const buttonStyle = css`
     cursor:pointer;
 `
 
-const Button = () => {
+const Button = ({ onClick }) => {
     return (
         <button 
-            css={buttonStyle}>
+            css={buttonStyle} onClick={onClick}>
            <div css={{ "display":"flex", "justifyContent":"center","alignItems":"center" }}>
                 <div>
                     <img width="40" src={Pokeball} alt="pokeball" css={{ "marginRight":"10px" }} />
