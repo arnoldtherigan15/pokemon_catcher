@@ -59,12 +59,10 @@ const backArrowStyle = css`
 
 const tabContainerStyle = css`
     display: flex;
-    ${'' /* background:red; */}
     width: 100%;
 `
 const tabStyle = css`
     border: none;
-    ${'' /* border-right: 2px solid gray; */}
     padding: 10px;
     border-top-right-radius:10px;
     border-top-left-radius:10px;
@@ -132,7 +130,6 @@ const Detail = () => {
     }
 
     const [currentTab, setCurrentTab] = useState('tab1');
-    // const tabList = TabList
 
     const { loading, error, data } = useQuery(GET_POKEMON_DETAIL, {
         variables: {
