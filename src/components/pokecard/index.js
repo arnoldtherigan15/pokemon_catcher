@@ -31,7 +31,6 @@ const ownedIndicator = css`
     top: 0px;
     left: 0;
     box-shadow: 1px 1px 3px #57606f;
-    ${'' /* border: 2px solid #57606f; */}
     z-index: 2;
     padding: 5px 10px;
     border-radius: 5px;
@@ -85,7 +84,6 @@ const PokeCard = (props) => {
             <div>
                 <img css={pokeImg} src={props.artwork} alt="pokemon" />
                 <img css={PokeBallBGStyle} src={PokeBallBG} alt="pokeball background" />
-                {/* <img css={PokeBall2BGStyle} src={PokeBallBG} alt="pokeball background" /> */}
             </div>
         </div>
       </div>
