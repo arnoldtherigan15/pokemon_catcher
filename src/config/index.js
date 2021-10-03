@@ -1,15 +1,11 @@
 import {
     ApolloClient,
     InMemoryCache,
-    ApolloProvider,
-    useQuery,
-    gql,
     makeVar
 } from "@apollo/client";
 
 
-export const myPokemonsVar = makeVar(JSON.parse(localStorage.getItem("myPokemons")))
-// const myPokemons = makeVar([]);
+export const myPokemonsVar = makeVar(JSON.parse(localStorage.getItem("myPokemons")) || [])
 
 
 const client = new ApolloClient({
@@ -21,9 +17,8 @@ const client = new ApolloClient({
                     ownedCounter: {
                         read(_, {readField}) {
                             let counter = 0;
-                            // const getData = JSON.parse(localStorage.getItem("myPokemons"))
                             myPokemonsVar().forEach(poke => {
-                                if(poke.name == readField('name')) counter += 1
+                                if(poke.name === readField('name')) counter += 1
                             });
                             return counter
                         }

@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { useState } from 'react'
-import { useParams, Link } from "react-router-dom";
-import { Button, Modal, generateTab, FailedNotification, SuccessNotification } from '../../components'
+import { useParams, Link, useHistory } from "react-router-dom";
+import { Button, Modal, generateTab, FailedNotification, SuccessNotification, IsExistsNotif, Loading, Error } from '../../components'
 import LeftArrow from '../../assets/left-arrow.svg'
 import { useQuery, gql } from '@apollo/client'
 import { myPokemonsVar } from '../../config'
@@ -59,23 +59,29 @@ const backArrowStyle = css`
 
 const tabContainerStyle = css`
     display: flex;
+    ${'' /* background:red; */}
+    width: 100%;
 `
 const tabStyle = css`
     border: none;
-    border-right: 2px solid gray;
+    ${'' /* border-right: 2px solid gray; */}
     padding: 10px;
     border-top-right-radius:10px;
     border-top-left-radius:10px;
-    margin: 0 10px;
+    background:#fbdb5d;
+    margin-right: 5px;
+    cursor: pointer;
 `
 const activeStyle = css`
+    background:#fbdb5d;
     border: none;
     border-right: 2px solid gray;
     padding: 10px;
     border-top-right-radius:10px;
     border-top-left-radius:10px;
-    margin: 0 10px;
-    border-bottom: 1px solid #fbdb5d;
+    margin-right: 5px;
+    cursor: pointer;
+    box-shadow: 1px 1px 5px black;
 `
 
 const GET_POKEMON_DETAIL = gql`
@@ -97,15 +103,18 @@ const GET_POKEMON_DETAIL = gql`
                     url
                 }
             }
+            message
         }
     }
 `
 
 const Detail = () => {
     let { name } = useParams();
+    const history = useHistory();
     const [isShowForm,setIsShowForm] = useState(false)
     const [isShowSuccess,setIsShowSuccess] = useState(false)
     const [isShowFailed,setIsShowFailed] = useState(false)
+    const [isShowExistsNotif,setIsShowExistsNotif] = useState(false)
 
     const clickModal = () =>  {
         if(Math.random() < 0.5) { //50% probability of getting true
@@ -133,11 +142,8 @@ const Detail = () => {
 
     
     
-    if (loading) return <p>Loading Detail...</p>;
-    if (error) {
-        console.log(error,">>>> eroror detail");
-        return <p>Error :(</p>;
-    }
+    if(loading) return <Loading/>;
+    if (error) return <Error/>
     
     let { sprites, name: pokeName, moves, types  } = data.pokemon
     const submitName = (e, nickName) => {
@@ -146,7 +152,11 @@ const Detail = () => {
         const previousData = JSON.parse(localStorage.getItem("myPokemons")) || [];
         let isExists = previousData.filter((poke) => poke.name === name && poke.nickName === nickName).length > 0
         if(isExists) {// pokemon is Exists
-            alert("pokemon sudah ada")
+            setIsShowExistsNotif(true)
+            setTimeout(() => {
+                setIsShowExistsNotif(false)
+            }, 2000);
+            setIsShowForm(true)
         } else {
             const newData = {
                 name,
@@ -155,6 +165,7 @@ const Detail = () => {
             }
             localStorage.setItem("myPokemons", JSON.stringify([...previousData, newData]));
             myPokemonsVar([...previousData, newData])
+            history.push(`/myPokemon`);
         }
     }
 
@@ -195,8 +206,9 @@ const Detail = () => {
             </div>
             <Button onClick={clickModal} /> 
             <Modal show={isShowForm} onSubmit={submitName}/>
-            <FailedNotification show={isShowFailed}/>
-            <SuccessNotification show={isShowSuccess}/>
+            <FailedNotification show={isShowFailed} />
+            <IsExistsNotif show={isShowExistsNotif} />
+            <SuccessNotification pokeName={pokeName} show={isShowSuccess}/>
         </>
     )
 }

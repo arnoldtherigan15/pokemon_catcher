@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css,keyframes } from '@emotion/react'
-import React, {useState, useEffect} from 'react';
-import { Heading, Navbar, PokeCard } from '../../components'
+import React, {useState, useEffect} from 'react'
+import { Heading, Navbar, PokeCard, Loading, Error } from '../../components'
 import pokeAppIcon from '../../assets/pokemonCatch.svg'
 import { useQuery, gql } from '@apollo/client'
 
@@ -21,29 +21,20 @@ const GET_POKEMONS = gql`
             results {
                 id
                 name
-                image
+                artwork
                 ownedCounter @client
             }
         }
     }  
 `
 
-// const GET_POKEMONS = gql`
-//     query {
-//         pokemons @client {
-//             isOwned @client
-//         }
-//     }
-// `
-
 const Home = (props) => {
-    const [scrollPosition, setScrollPosition] = useState(0);
-    const [isShowBottom, setShowBottom] = useState(false);
-    // const [pokemons, setPokemons] = useState([])
+    const [scrollPosition, setScrollPosition] = useState(0)
+    const [isShowBottom, setShowBottom] = useState(false)
 
     const handleScroll = () => {
-        const position = window.pageYOffset;
-        setScrollPosition(position);
+        const position = window.pageYOffset
+        setScrollPosition(position)
     };
     
     useEffect(() => {
@@ -54,46 +45,15 @@ const Home = (props) => {
             setShowBottom(false)
         }
         return () => {
-            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('scroll', handleScroll)
         };
     }, [scrollPosition]);
 
-    // const { loading, error, data } = useQuery(GET_POKEMONS, {
-    //     variables: {
-    //         limit: 20,
-    //         offset: 0
-    //     }
-    // });
-    const { loading, error, data } = useQuery(GET_POKEMONS);
+    const { loading, error, data } = useQuery(GET_POKEMONS)
 
-    // const cache = new InMemoryCache({
-    //     typePolicies: { // Type policy map
-    //       Product: {
-    //         fields: { // Field policy map for the Product type
-    //           isOwned: { // Field policy for the isInCart field
-    //             read(_, { variables }) { // The read function for the isInCart field
-    //               return localStorage.getItem('CART').includes(
-    //                 variables.productId
-    //               );
-    //             }
-    //           }
-    //         }
-    //       }
-    //     }
-    //   });
-      
 
-    if (loading) return <p>Loading...</p>;
-    if (error) {
-        console.log(error,">>>>");
-        return <p>Error :</p>;
-    }
-    // if(data) {
-    //     setPokemons(data.pokemons.results)
-    // }
-    
-    // console.log(data,">>>>dataa");
-    // const myPokemons = JSON.parse(localStorage.getItem("myPokemons"));
+    if(loading) return <Loading/>
+    if(error) return <Error/>
 
     return (
         <>
@@ -122,9 +82,7 @@ const Home = (props) => {
                         />
                         )
                     })}
-                {/* {
-                    JSON.stringify(data)
-                } */}
+
                 </div>
                 {
                     isShowBottom && (
@@ -142,7 +100,6 @@ const Home = (props) => {
                         </svg>
                     )
                 }
-                {/* <Heading color="red">haiiii</Heading> */}
             </main>
         </>
     )
