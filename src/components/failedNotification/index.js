@@ -44,7 +44,7 @@ const FailedNotification = (props) => {
                     <Heading size="1.5em" color="black">What Happen ?</Heading>
                 </div>
                 <div css={modalBody}>
-                    Failed to catch pokemon
+                    {props.errorMsg}
                 </div>
             </div>
         </div>

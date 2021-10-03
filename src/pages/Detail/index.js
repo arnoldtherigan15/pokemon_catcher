@@ -113,6 +113,7 @@ const Detail = () => {
     const [isShowSuccess,setIsShowSuccess] = useState(false)
     const [isShowFailed,setIsShowFailed] = useState(false)
     const [isShowExistsNotif,setIsShowExistsNotif] = useState(false)
+    const [errorMsg,setErrorMsg] = useState("")
 
     const clickModal = () =>  {
         if(Math.random() < 0.5) { //50% probability of getting true
@@ -122,6 +123,7 @@ const Detail = () => {
                 setIsShowForm(true)
             }, 2000);
         } else {
+            setErrorMsg("Failed to catch pokemon")
             setIsShowFailed(true)
             setTimeout(() => {
                 setIsShowFailed(false)
@@ -146,24 +148,34 @@ const Detail = () => {
     const submitName = (e, nickName) => {
         e.preventDefault()
         setIsShowForm(false)
-        const previousData = JSON.parse(localStorage.getItem("myPokemons")) || [];
-        let isExists = previousData.filter((poke) => poke.name === name && poke.nickName === nickName).length > 0
-        if(isExists) {// pokemon is Exists
-            setIsShowExistsNotif(true)
+        if(!nickName) {
+            setErrorMsg("Nickname cannot be empty!")
+            setIsShowFailed(true)
             setTimeout(() => {
-                setIsShowExistsNotif(false)
+                setIsShowFailed(false)
             }, 2000);
             setIsShowForm(true)
         } else {
-            const newData = {
-                name,
-                nickName,
-                image: sprites.front_default
+            const previousData = JSON.parse(localStorage.getItem("myPokemons")) || [];
+            let isExists = previousData.filter((poke) => poke.name === name && poke.nickName === nickName).length > 0
+            if(isExists) {// pokemon is Exists
+                setIsShowExistsNotif(true)
+                setTimeout(() => {
+                    setIsShowExistsNotif(false)
+                }, 2000);
+                setIsShowForm(true)
+            } else {
+                const newData = {
+                    name,
+                    nickName,
+                    image: sprites.front_default
+                }
+                localStorage.setItem("myPokemons", JSON.stringify([...previousData, newData]));
+                myPokemonsVar([...previousData, newData])
+                history.push(`/myPokemon`);
             }
-            localStorage.setItem("myPokemons", JSON.stringify([...previousData, newData]));
-            myPokemonsVar([...previousData, newData])
-            history.push(`/myPokemon`);
         }
+
     }
 
     return (
@@ -203,7 +215,7 @@ const Detail = () => {
             </div>
             <Button onClick={clickModal} /> 
             <Modal show={isShowForm} onSubmit={submitName}/>
-            <FailedNotification show={isShowFailed} />
+            <FailedNotification show={isShowFailed} errorMsg={errorMsg} />
             <IsExistsNotif show={isShowExistsNotif} />
             <SuccessNotification pokeName={pokeName} show={isShowSuccess}/>
         </>
