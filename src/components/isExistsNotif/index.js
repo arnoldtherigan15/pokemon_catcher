@@ -44,7 +44,7 @@ const IsExistsNotif = (props) => {
                     <Heading size="1.5em" color="black">What Happen ?</Heading>
                 </div>
                 <div css={modalBody}>
-                    Pokemon with {props.nickName} nickname is already exists
+                    Pokemon with this nickname is already exists
                 </div>
             </div>
         </div>

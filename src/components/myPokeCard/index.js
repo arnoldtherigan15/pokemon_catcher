@@ -90,11 +90,30 @@ const deleteBtnLeft = css`
     cursor: pointer;
 `
 
-const textSecondary = css`
+const textSecondaryRight = css`
     background: rgba(30, 39, 46,.2);
     padding: 5px;
     border-radius: 10px;
     margin-top: 5px;
+    display: inline-block;
+    float:right;
+`
+
+const textSecondaryLeft= css`
+    background: rgba(30, 39, 46,.2);
+    padding: 5px;
+    border-radius: 10px;
+    margin-top: 5px;
+    display: inline-block;
+`
+
+const nickNameText = css`
+    color: black;
+    font-size: 1.5em;
+    overflow:hidden; 
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 160px;
 `
 
 const MyPokeCard = (props) => {
@@ -104,9 +123,9 @@ const MyPokeCard = (props) => {
                 (props.idx % 2 !== 0) ? (
                     <div css={cardBodyStyle}>
                         <button css={deleteBtnLeft} onClick={()=> props.deletePokemon(props.name, props.nickName)}>Remove</button>
-                        <div css={{ "marginLeft":"30px", "position": "relative" }}>
-                            <Heading color="black" size="1.5em">{props.nickName}</Heading>
-                            <div css={textSecondary}>
+                        <div css={{ "marginLeft":"20px"}}>
+                            <h1 css={nickNameText}>{props.nickName}</h1>
+                            <div css={textSecondaryLeft}>
                                 <Heading color="white" size="1em">{props.name}</Heading>
                             </div>
                         </div>
@@ -123,9 +142,9 @@ const MyPokeCard = (props) => {
                             <img css={image} width="150" src={props.image} alt="pokemon" />
                             <img css={shadow} width="150" src={props.image} alt="pokemon" />
                         </div>
-                        <div css={{ "marginRight":"30px", "textAlign": "right" }}>
-                            <Heading color="black" size="1.5em">{props.nickName}</Heading>
-                            <div css={textSecondary}>
+                        <div css={{ "marginRight":"20px" }}>
+                            <h1 css={nickNameText}>{props.nickName}</h1>
+                            <div css={textSecondaryRight}>
                                 <Heading color="white" size="1em">{props.name}</Heading>
                             </div>
                         </div>
