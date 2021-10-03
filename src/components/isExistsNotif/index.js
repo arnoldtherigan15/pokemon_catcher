@@ -35,7 +35,7 @@ const modalBody = css`
     border-bottom: 1px solid #eee;
 `
 
-const FailedNotification = (props) => {
+const IsExistsNotif = (props) => {
     if(!props.show) return null
     return (
         <div css={modal}>
@@ -44,11 +44,11 @@ const FailedNotification = (props) => {
                     <Heading size="1.5em" color="black">What Happen ?</Heading>
                 </div>
                 <div css={modalBody}>
-                    Failed to catch pokemon
+                    Pokemon with {props.nickName} nickname is already exists
                 </div>
             </div>
         </div>
     )
 }
 
-export default FailedNotification
+export default IsExistsNotif

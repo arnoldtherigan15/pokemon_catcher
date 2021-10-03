@@ -34,6 +34,7 @@ const buttonStyle = css`
     bottom: -30px;
     left: 0;
     cursor:pointer;
+    z-index: 999;
 `
 
 const Button = ({ onClick }) => {

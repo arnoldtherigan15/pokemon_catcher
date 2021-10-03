@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Heading, Badge } from '../'
+import { Heading } from '../'
 import PokeBallBG from '../../assets/pokeballCircle.svg'
 import PokeBall from '../../assets/pokeball2.svg'
 import { useHistory } from 'react-router-dom';
@@ -81,12 +81,9 @@ const PokeCard = (props) => {
         <div onClick={handleClick} className="pokecard" css={cardStyle}>
             <div css={{ "display": "flex", "justifyContent": "center", "flexDirection": "column", "marginLeft": "20px" }}>
                 <Heading size="1.5em" color="white">{props.name}</Heading>
-                <div>
-                    <Badge text="Grass" textColor="white" />
-                </div>
             </div>
             <div>
-                <img css={pokeImg} src={props.image} alt="pokemon" />
+                <img css={pokeImg} src={props.artwork} alt="pokemon" />
                 <img css={PokeBallBGStyle} src={PokeBallBG} alt="pokeball background" />
                 {/* <img css={PokeBall2BGStyle} src={PokeBallBG} alt="pokeball background" /> */}
             </div>

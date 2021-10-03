@@ -12,6 +12,9 @@ const navStyle = css`
   left:0;
   width:100vw;
   z-index:9999;
+  display: flex;
+  align-items:center;
+  justify-content:center;
 `
 
 const pokeballStyle = css`
@@ -24,7 +27,6 @@ const navBrandStyle = css`
   align-items:center;
   justify-content:center;
 `
-
 const Navbar = () => {
   const history = useHistory();
     function handleClick() {

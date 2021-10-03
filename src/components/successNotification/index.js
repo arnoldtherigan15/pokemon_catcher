@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react'
 import { Heading } from '../'
 import { css, keyframes } from '@emotion/react'
 
@@ -22,7 +21,7 @@ const modal = css`
 `
 
 const modalContent = css`
-    width: 500px;
+    width: 100vw;
     background-color: #fff;
 `
 
@@ -44,7 +43,7 @@ const SuccessNotification = (props) => {
                     <Heading size="1.5em" color="black">Success</Heading>
                 </div>
                 <div css={modalBody}>
-                    Youre pokemon master
+                    {props.pokeName} has been caught.
                 </div>
             </div>
         </div>

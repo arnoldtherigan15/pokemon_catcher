@@ -25,7 +25,6 @@ const cardBodyStyle = css`
 `
 
 const circle = css`
-    ${'' /* border-radius: 100%; */}
     position: absolute;
     width: 150px;
     height: 150px;
@@ -49,7 +48,7 @@ const circleLeft = css`
 
 const shadow = css`
     bottom: -10px;
-    filter: blur(10px);/* this is the magic part */
+    filter: blur(10px);
     height: 100%;
     left: 0;
     position: absolute;
@@ -63,18 +62,54 @@ const image = css`
     z-index: 2;
 `
 
+const deleteBtnRight = css`
+    padding: 5px 10px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border: none;
+    background: #ed5565;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+`
+
+const deleteBtnLeft = css`
+    padding: 5px 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border: none;
+    background: #ed5565;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+`
+
+const textSecondary = css`
+    background: rgba(30, 39, 46,.2);
+    padding: 5px;
+    border-radius: 10px;
+    margin-top: 5px;
+`
+
 const MyPokeCard = (props) => {
     return (
         <div css={container}>
-            {/* <div css={cardBodyStyle}> */}
             {
-                (props.idix % 2 !== 0) ? (
+                (props.idx % 2 !== 0) ? (
                     <div css={cardBodyStyle}>
-                        <div css={{ "marginLeft":"20px" }}>
+                        <button css={deleteBtnLeft} onClick={()=> props.deletePokemon(props.name, props.nickName)}>Remove</button>
+                        <div css={{ "marginLeft":"30px", "position": "relative" }}>
                             <Heading color="black" size="1.5em">{props.nickName}</Heading>
-                            <Heading color="white" size="1em">{props.name}</Heading>
+                            <div css={textSecondary}>
+                                <Heading color="white" size="1em">{props.name}</Heading>
+                            </div>
                         </div>
-                        <button css={{ "position":"absolute","zIndex": "9999" }} onClick={()=> props.deletePokemon(props.name, props.nickName)}>Delete</button>
                         <div css={{ "position": "relative" }}>
                             <img css={image} width="150" src={props.image} alt="pokemon" />
                             <img css={shadow} width="150" src={props.image} alt="pokemon" />
@@ -83,14 +118,16 @@ const MyPokeCard = (props) => {
                     </div>
                 ) : (
                     <div css={cardBodyStyle}>
-                        <button css={{ "position":"absolute","zIndex": "9999" }} onClick={()=>props.deletePokemon(props.name, props.nickName)}>Delete</button>
+                        <button css={deleteBtnRight} onClick={()=>props.deletePokemon(props.name, props.nickName)}>Remove</button>
                         <div css={{ "position": "relative" }}>
                             <img css={image} width="150" src={props.image} alt="pokemon" />
                             <img css={shadow} width="150" src={props.image} alt="pokemon" />
                         </div>
-                        <div css={{ "marginRight":"20px", "textAlign": "right" }}>
+                        <div css={{ "marginRight":"30px", "textAlign": "right" }}>
                             <Heading color="black" size="1.5em">{props.nickName}</Heading>
-                            <Heading color="white" size="1em">{props.name}</Heading>
+                            <div css={textSecondary}>
+                                <Heading color="white" size="1em">{props.name}</Heading>
+                            </div>
                         </div>
                         <div css={circleLeft}></div>
                     </div>

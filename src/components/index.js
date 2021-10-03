@@ -9,6 +9,10 @@ import Modal from './modal'
 import FailedNotification from './failedNotification'
 import SuccessNotification from './successNotification'
 import generateTab from './tabs'
+import IsExistsNotif from './isExistsNotif'
+import DeleteModal from './deleteModal'
+import Loading from './loading'
+import Error from './error'
 
 export {
     Button,
@@ -21,5 +25,9 @@ export {
     Modal,
     FailedNotification,
     SuccessNotification,
-    generateTab
+    generateTab,
+    IsExistsNotif,
+    DeleteModal,
+    Loading,
+    Error
 }

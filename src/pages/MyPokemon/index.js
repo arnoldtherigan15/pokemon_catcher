@@ -1,8 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { Heading, NavbarSimple, MyPokeCard } from '../../components'
+import { Heading, NavbarSimple, MyPokeCard, DeleteModal } from '../../components'
 import pokemonTrainer from '../../assets/pokeTrainer.svg'
+import emptyGif from '../../assets/empty.gif'
 import { css } from '@emotion/react'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { myPokemonsVar } from '../../config'
 import { useQuery, gql } from '@apollo/client'
 
@@ -11,6 +12,14 @@ const mainContainer = css`
     padding: 0 20px;
     overflow-x: hidden;
 `
+
+const emptyContainer = css`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+`
+
 const GET_MY_POKEMONS = gql`
      query getMyPokemon {
         myPokemons @client
@@ -19,31 +28,33 @@ const GET_MY_POKEMONS = gql`
 
 const MyPokemon = () => {
     const { data } = useQuery(GET_MY_POKEMONS);
-    // console.log(myPokemons,">>>>>AAAA");
-    // console.log(datas(),">>>DATASS");
-    // const [myPokemons, setMyPokemons] = useState([]); // Task State
-    // const getData = JSON.parse(localStorage.getItem("myPokemons"));
+    const [isShowModal,setIsShowModal] = useState(false)
+    const [name,setName] = useState("")
+    const [nickname,setNickname] = useState("")
+    
     const getData = [...data.myPokemons];
-    const deletePokemon = (name, nickName) => {
-        // let isExists = getData.filter((poke) => poke.name === name && poke.nickName === nickName).length > 0
-        let indexPoke = getData.findIndex(function(poke) {
-            return poke.name === name && poke.nickName === nickName;
-        });
-        getData.splice(indexPoke, 1)
-        localStorage.setItem("myPokemons", JSON.stringify(getData));
-        // console.log(myPokemons(),"<<<<< BEFOREEE");
-        myPokemonsVar(getData)
-        // console.log(myPokemons(),"<<<<< AFTER");
-    }
 
-    // useEffect(() => {
-    //     if (!getData) {
-    //         setMyPokemons([])
-    //     } else {
-    //         setMyPokemons(getData)
-    //     }
-    // }, [])
+    const clickRemoveModal = (isDelete) => {
+        if(isDelete) {
+            let indexPoke = getData.findIndex(function(poke) {
+                return poke.name === name && poke.nickName === nickname;
+            });
+            getData.splice(indexPoke, 1)
+            localStorage.setItem("myPokemons", JSON.stringify(getData));
+            myPokemonsVar(getData)
+            setIsShowModal(false)
+        } else {
+            setIsShowModal(false)
+        }
+    }
+    const deletePokemon = (name, nickName) => {
+        setIsShowModal(true)
+        setName(name)
+        setNickname(nickName)
+    }
+    
     return (
+        data.myPokemons.length ? (
         <>
             <NavbarSimple/>
             <div css={mainContainer}>
@@ -63,7 +74,18 @@ const MyPokemon = () => {
                     }
                 </div>
             </div>
+            <DeleteModal show={isShowModal} onClick={clickRemoveModal} nickname={nickname}/>
         </>
+        ) : (
+            <>
+                <NavbarSimple/>
+                <div css={mainContainer}>
+                    <div css={emptyContainer}>
+                        <img src={emptyGif} alt="empty"/>
+                    </div>
+                </div>
+            </>
+        )
     )
 }   
 
