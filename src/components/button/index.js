@@ -20,13 +20,10 @@ const bounce = keyframes`
   }
 `
 const buttonStyle = css`
-    
     border: none;
     padding: 0px 10px 10px 10px;
-    ${'' /* border-radius:10px; */}
     width: 100vw;
     background: #fbdb5d;
-    
     box-shadow: 0px -3px 4px rgba(164, 176, 190,.6);
     animation: ${bounce} 2s ease infinite;
     height: 15vh;
