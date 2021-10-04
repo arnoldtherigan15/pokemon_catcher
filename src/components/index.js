@@ -2,7 +2,6 @@ import Button from './button'
 import Heading from './heading'
 import Navbar from './navbar'
 import PokeCard from './pokecard'
-import Badge from './badge'
 import NavbarSimple from './navbarSimple'
 import MyPokeCard from './myPokeCard'
 import Modal from './modal'
@@ -19,7 +18,6 @@ export {
     Heading,
     Navbar,
     PokeCard,
-    Badge,
     NavbarSimple,
     MyPokeCard,
     Modal,

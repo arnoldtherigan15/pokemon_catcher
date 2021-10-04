@@ -50,6 +50,12 @@ const deleteBtn = css`
     background: #ed5565;
 `
 
+// const textContainer = css`
+//     overflow:hidden; 
+//     white-space: nowrap;
+//     text-overflow: ellipsis;
+// `
+
 
 const DeleteModal = (props) => {
 
@@ -63,7 +69,7 @@ const DeleteModal = (props) => {
                             <img width={50} src={pokeBall} alt="poke app icon" />
                         </div>
                         <div>
-                            <Heading color="black" size="2em">Are you  sure want to remove {props.nickname} ?</Heading>
+                            <Heading color="black" size="1.5em">Are you  sure want to remove this pokemon ?</Heading>
                         </div>
                     </div>
                 </div>
